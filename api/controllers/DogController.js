@@ -14,6 +14,11 @@ module.exports = {
         name: req.query.name
       })
       .then(function(dog) {
+
+        if (!dog) {
+            return res.notFound();
+        }
+
         // check the dog breed, this is a string of dog breeds joined by ":",
         // for example "pomeranian:chihuaua:shihtzu"
         var breeds = dog.breed.split(":");
@@ -45,7 +50,7 @@ module.exports = {
         });
 
 
-        //TODO should incorporate average age of breeds here 
+        //TODO should incorporate average age of breeds here
         // if the dog is little, it probably needs a bath
         if (dog.age < 1) {
           dogWashingInterval /= 2;

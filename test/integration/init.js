@@ -15,6 +15,6 @@ before(function (done) {
       i18n: false,
       grunt: false
     },
-    bootstrap: require("./fixtures/bootstrap"),
+    bootstrap: require("../fixtures/bootstrap"),
   }, done);
 });

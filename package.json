@@ -30,7 +30,8 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "test": "NODE_ENV=test mocha ./test/* --timeout 5000"
+    "test": "NODE_ENV=test mocha ./test/unit/* --timeout 5000",
+    "test-integration": "NODE_ENV=test mocha ./test/integration/* --timeout 5000"
   },
   "main": "app.js",
   "repository": {
@@ -40,6 +41,7 @@
   "author": "rquinn",
   "license": "",
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "timekeeper": "0.0.5"
   }
 }

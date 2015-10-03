@@ -5,7 +5,7 @@
 module.exports = {
 
   reverse: function(str) {
-    if (!str || !str.len || typeof str != 'string') return '';
+    if (!str || !str.length || typeof str != 'string') return '';
     var reverse = [];
     var strlen = str.length;
     for (var i = 0; i < strlen; i++) {

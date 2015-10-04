@@ -1,9 +1,18 @@
-var Promise = require('bluebird');
+var request = require('request');
+
 module.exports = {
-    checkAvailability: function (groomer, date) {
-       return Promise.delay(2000)
-           .then(function () {
-                return Math.random() > 0.5;
-           });
-    }
+  scheduleAppointment: function(groomers, date) {
+    return new Promise(function(resolve, reject) {
+      request.post({
+        url: 'http://localhost:1400/scheduleGroomer',
+        form: {
+          groomers: groomers,
+          date: date
+        }
+      }, function(err, res, body) {
+        if (err) return reject(err);
+        resolve(JSON.parse(body));
+      });
+    });
+  }
 };

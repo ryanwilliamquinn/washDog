@@ -16,7 +16,7 @@ module.exports = {
       .then(function(dog) {
 
         if (!dog) {
-            return res.notFound();
+          return res.notFound();
         }
 
 
@@ -34,22 +34,19 @@ module.exports = {
         }
 
         ok.then(function(groomers) {
-          Promise.map(groomers, function(groomer) {
-            return GroomerService.checkAvailability(groomer, dogWashDate)
-              .then(function(isAvailable) {
-                if (isAvailable) {
-                  return groomer;
-                }
-              });
-          }).then(function(availableGroomers) {
-            res.ok({
-              dogWashDate: dogWashDate,
-              groomers: _.compact(availableGroomers)
+          return GroomerService.scheduleAppointment(groomers, dogWashDate);
+        }).then(function(appt) {
+          if (appt && appt.groomer) {
+            res.json({
+              date: appt.date,
+              groomer: appt.groomer
             });
-          });
+          } else {
+            res.notFound();
+          }
+        }).catch(function() {
+          res.notFound();
         });
-
-
       });
   }
 

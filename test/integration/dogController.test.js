@@ -12,13 +12,13 @@ describe('dog controller tests', function() {
         assert.ifError(err);
 
         var appointment = res.body;
-        var dogWashDate = new Date(appointment.dogWashDate);
+        var dogWashDate = new Date(appointment.date);
 
         // all i am comfortable asserting right now is that the date should be in the future
         assert(dogWashDate.getTime() > new Date().getTime());
 
         // not totally sure there is going to be a groomer, we get availability from 3rd party service
-        assert(appointment.groomers.length === 1);
+        assert(appointment.groomer);
         done();
       });
   });

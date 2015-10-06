@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var moment = require('moment');
+var request = require('request');
 /**
  * DogController
  *
@@ -16,7 +17,7 @@ module.exports = {
       .then(function(dog) {
 
         if (!dog) {
-            return res.notFound();
+          return res.notFound();
         }
 
         // check the dog breed, this is a string of dog breeds joined by ":",
@@ -72,22 +73,29 @@ module.exports = {
         }
 
         ok.then(function(groomers) {
-          Promise.map(groomers, function(groomer) {
-            return GroomerService.checkAvailability(groomer, dogWashDate)
-              .then(function(isAvailable) {
-                if (isAvailable) {
-                  return groomer;
-                }
-              });
-          }).then(function(availableGroomers) {
-            res.ok({
-              dogWashDate: dogWashDate,
-              groomers: _.compact(availableGroomers)
+          return new Promise(function(resolve, reject) {
+            console.log('ffs', groomers);
+            // check if the groomers are available for the dog wash date
+            request.post({
+              url: "http://groomerscheduler.com:1400/scheduleGroomer",
+              form: {
+                groomers: groomers,
+                date: dogWashDate
+              }
+            }, function(err, response, body) {
+              if (!err && response.statusCode == 200) {
+                console.log('the body', body);
+                return resolve(JSON.parse(body));
+              }
+              resolve([]);
             });
           });
+        }).then(function(appointment) {
+          res.ok({
+            dogWashDate: dogWashDate,
+            groomer: appointment.groomer
+          });
         });
-
-
       });
   }
 

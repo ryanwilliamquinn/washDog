@@ -1,9 +1,23 @@
 var assert = require('assert');
 var request = require('supertest');
+var sinon = require('sinon');
+var Promise = require('bluebird');
+var moment = require('moment');
 
 describe('dog controller tests', function() {
 
   it('should return a dog wash appointment for a good dog', function(done) {
+
+    var groomerAppointmentDate = moment().add(30, 'days').format();
+    var schedulerStub = sinon.stub(sails.services.groomerservice, 'scheduleAppointment', function () {
+        return Promise.resolve({
+            date: groomerAppointmentDate,
+            groomer: {
+                name: 'carrie'
+            }
+        });
+    });
+
     request(sails.hooks.http.app)
       .get('/appointment?name=turbo')
       .expect(200)
@@ -12,13 +26,11 @@ describe('dog controller tests', function() {
         assert.ifError(err);
 
         var appointment = res.body;
-        var dogWashDate = new Date(appointment.date);
 
         // all i am comfortable asserting right now is that the date should be in the future
-        assert(dogWashDate.getTime() > new Date().getTime());
+        assert(appointment.date == groomerAppointmentDate);
+        assert(appointment.groomer.name == 'carrie');
 
-        // not totally sure there is going to be a groomer, we get availability from 3rd party service
-        assert(appointment.groomer);
         done();
       });
   });

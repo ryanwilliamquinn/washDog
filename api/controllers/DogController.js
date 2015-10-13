@@ -60,7 +60,7 @@ module.exports = {
           dogWashingInterval = 9999999;
         }
 
-        var dogWashDate = moment().add(dogWashingInterval, 'days');
+        var dogWashDate = moment().add(dogWashingInterval, 'days').toDate();
         // check groomer availability
 
         var groomers = dog.groomers;
@@ -74,7 +74,6 @@ module.exports = {
 
         ok.then(function(groomers) {
           return new Promise(function(resolve, reject) {
-            console.log('ffs', groomers);
             // check if the groomers are available for the dog wash date
             request.post({
               url: "http://groomerscheduler.com:1400/scheduleGroomer",
@@ -84,16 +83,10 @@ module.exports = {
               }
             }, function(err, response, body) {
               if (!err && response.statusCode == 200) {
-                console.log('the body', body);
-                return resolve(JSON.parse(body));
+                return res.ok(JSON.parse(body));
               }
-              resolve([]);
+              res.badRequest();
             });
-          });
-        }).then(function(appointment) {
-          res.ok({
-            dogWashDate: dogWashDate,
-            groomer: appointment.groomer
           });
         });
       });

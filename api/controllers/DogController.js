@@ -19,34 +19,18 @@ module.exports = {
           return res.notFound();
         }
 
+        // get the appropriate date for our dog's next bath
+        var dogWashDate = DogAppointmentService.calculateWashDate(dog);
 
-        var dogWashDate = DogAppointmentService.getWashDate(dog);
+        // find the dog's favorite groomers
+        GroomerService.getGroomersForDog(dog)
+          .then(function(groomers) {
 
-        // check groomer availability
-
-        var groomers = dog.groomers;
-        var ok;
-        // if a dog has no specific groomer, check all the groomers
-        if (!groomers || groomers.length === 0) {
-          ok = Groomer.find();
-        } else {
-          ok = Promise.resolve(groomers);
-        }
-
-        ok.then(function(groomers) {
-          return GroomerService.scheduleAppointment(groomers, dogWashDate);
-        }).then(function(appt) {
-          if (appt && appt.groomer) {
-            res.json({
-              date: appt.date,
-              groomer: appt.groomer
-            });
-          } else {
-            res.notFound();
-          }
-        }).catch(function() {
-          res.notFound();
-        });
+            // check groomer availability
+            return GroomerService.scheduleAppointment(groomers, dogWashDate)
+              .then(res.json.bind(res))
+              .catch(res.notFound.bind(res));
+          });
       });
   }
 

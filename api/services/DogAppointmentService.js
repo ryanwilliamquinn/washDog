@@ -2,7 +2,7 @@ var moment = require('moment');
 
 module.exports = {
 
-  getWashDate: function(dog) {
+  calculateWashDate: function(dog) {
 
     // check the dog breed, this is a string of dog breeds joined by ":",
     // for example "pomeranian:chihuaua:shihtzu"

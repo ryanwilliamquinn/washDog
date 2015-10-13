@@ -22,6 +22,8 @@ describe('dog controller tests', function() {
       .get('/appointment?name=turbo')
       .expect(200)
       .end(function(err, res) {
+        schedulerStub.restore();
+
         // there should be no error
         assert.ifError(err);
 

@@ -14,5 +14,12 @@ module.exports = {
         resolve(JSON.parse(body));
       });
     });
+  },
+
+  getGroomersForDog: function(dog) {
+    if (dog.groomers.length > 0) {
+      return Promise.resolve(dog.groomers);
+    }
+    return Groomer.find();
   }
 };

@@ -1,12 +1,12 @@
 var assert = require('assert');
 var DogAppointmentService = require('../../api/services/DogAppointmentService.js');
+var moment = require('moment');
 var tk = require('timekeeper');
 
 describe('Dog appointment service tests', function() {
   before(function(done) {
     // freeze the date, so we have deterministic tests
-    // this is October 15th, 2015
-    var time = new Date(1444910400000);
+    var time = moment().year(2015).month('october').date(15).toDate();
     tk.freeze(time);
     done();
   });
@@ -18,7 +18,7 @@ describe('Dog appointment service tests', function() {
       age: 2
     };
 
-    var washDate = DogAppointmentService.getWashDate(dog);
+    var washDate = DogAppointmentService.calculateWashDate(dog);
     assert(washDate.getDate() == 7);
     assert(washDate.getMonth() == 10);
   });

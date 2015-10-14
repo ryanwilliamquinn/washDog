@@ -11,6 +11,11 @@ describe('Dog appointment service tests', function() {
     done();
   });
 
+  after(function(done) {
+    tk.reset();
+    done();
+  });
+
   it('should calculate the date of a dogs next appointment', function() {
     var dog = {
       name: 'winnie',

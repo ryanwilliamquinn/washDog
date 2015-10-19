@@ -33,7 +33,8 @@
     "debug": "node debug app.js",
     "start": "node app.js",
     "test": "NODE_ENV=test mocha ./test/unit/* --timeout 5000",
-    "test-integration": "NODE_ENV=test mocha ./test/integration/* --timeout 5000"
+    "test-integration": "NODE_ENV=test mocha ./test/integration/* --timeout 5000",
+    "test-cov": "NODE_ENV=test mocha ./test/unit/* --require blanket -R html-cov > coverage.html"
   },
   "main": "app.js",
   "repository": {
@@ -43,7 +44,13 @@
   "author": "rquinn",
   "license": "",
   "devDependencies": {
+    "blanket": "^1.1.7",
     "mocha": "^2.3.3",
     "timekeeper": "0.0.5"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "api"
+    }
   }
 }
